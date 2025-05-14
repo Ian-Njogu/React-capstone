@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { saveToLocalStorage, loadFromLocalStorage } from "../utils/LocalStorage"; // Update the import path
+import StatCard from "./StatCard.jsx";
+import FormInput from "./FormInput";
 
 const STORAGE_KEY = "fitnessData";
 
