@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { saveToLocalStorage, loadFromLocalStorage } from "../utils/LocalStorage"; // Update the import path
+import { saveToLocalStorage, loadFromLocalStorage } from "../utils/LocalStorage";
 import StatCard from "./StatCard.jsx";
 import FormInput from "./FormInput";
+import ChartDisplay from "./ChartDisplay";
 
 const STORAGE_KEY = "fitnessData";
 
@@ -44,6 +45,12 @@ export const TrackerDashboard = () => {
     setFormData({ date: "", steps: "", calories: "", workoutMinutes: "" });
   };
 
+  const handleRemoveEntry = (id) => {
+    const updatedEntries = entries.filter(entry => entry.id !== id);
+    setEntries(updatedEntries);
+    saveToLocalStorage(updatedEntries);
+  };
+
   // Calculate totals for dashboard metrics
   const totalSteps = entries.reduce((sum, entry) => sum + (entry.steps || 0), 0);
   const totalCalories = entries.reduce((sum, entry) => sum + (entry.calories || 0), 0);
@@ -59,7 +66,7 @@ export const TrackerDashboard = () => {
           <p className="text-gray-600">Track your health and wellness journey</p>
         </header>
 
-        {/* Stats Cards - These will now update automatically */}
+        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard 
             title="Total Steps" 
@@ -85,6 +92,11 @@ export const TrackerDashboard = () => {
             icon="📊" 
             color="bg-green-100 text-green-600"
           />
+        </div>
+
+        {/* Chart Display Section */}
+        <div className="mb-8">
+          <ChartDisplay data={entries} />
         </div>
 
         {/* Main Content */}
@@ -149,6 +161,7 @@ export const TrackerDashboard = () => {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Steps</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Calories</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Workout</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -166,6 +179,17 @@ export const TrackerDashboard = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {entry.workoutMinutes} mins
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <button
+                            onClick={() => handleRemoveEntry(entry.id)}
+                            className="text-red-600 hover:text-red-800 transition-colors duration-200"
+                            title="Remove entry"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -182,5 +206,3 @@ export const TrackerDashboard = () => {
     </div>
   );
 };
-
-// Reusable components (StatCard and FormInput) remain the same as before
