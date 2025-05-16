@@ -12,7 +12,7 @@ function Login() {
  const handleLogin = async () => {
  try {
  await signInWithEmailAndPassword(auth, email, password);
- navigate('/dashboard');
+ navigate('/');
  } catch (e) {
  setError(e.message);
  }
@@ -48,7 +48,7 @@ function Login() {
 
  <button
  onClick={handleLogin}
- className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
+ className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer"
  >
  Login
  </button>
